@@ -3,10 +3,12 @@ package io.github.jakubherr.todo.ui.theme.shared
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -91,16 +93,19 @@ fun Task(
     checked: Boolean,
     onChecked: (Boolean) -> Unit,
 ) {
-    Card(modifier = Modifier.padding(horizontal = 2.dp)) {
+    Card(modifier = Modifier.padding(horizontal = 8.dp)) {
         Row(
             modifier = Modifier
-                .padding(horizontal = 5.dp)
                 .wrapContentHeight()
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(text, fontWeight = FontWeight.Bold)
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(text, style = MaterialTheme.typography.titleMedium)
+                Spacer(Modifier.width(8.dp))
+                Text("05.03.23 12:45", style = MaterialTheme.typography.bodySmall) // placeholder
+            }
             Checkbox(checked = checked, onCheckedChange = { onChecked(it) })
         }
     }
