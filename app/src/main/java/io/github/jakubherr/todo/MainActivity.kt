@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -11,14 +12,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ChecklistRtl
-import androidx.compose.material.icons.filled.FilterAlt
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Sort
-import androidx.compose.material.icons.filled.Today
+import androidx.compose.material.icons.outlined.Book
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -53,7 +53,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview(
     heightDp = 800,
     widthDp = 360,
@@ -63,19 +62,22 @@ class MainActivity : ComponentActivity() {
 )
 @Composable
 fun MainScreenPreview() {
-    var expanded by remember { mutableStateOf(false) }
+    TodoScaffold() { padding ->
+        Surface(Modifier.padding(padding)) {
+            TaskListPreview()
+        }
+    }
+}
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TodoScaffold(title: String = "Title",content: @Composable (PaddingValues) -> Unit) {
     TodoTheme {
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text("Overview", style = MaterialTheme.typography.headlineSmall) },
-                    actions = {
-                        IconButton(onClick = { expanded = true }) {
-                            Icon(Icons.Default.MoreVert, "")
-                            MainDropdownMenu(expanded = expanded) { expanded = false }
-                        }
-                    }
+                    title = { Text(title, style = MaterialTheme.typography.headlineSmall) },
+                    actions = { MainDropdownMenu() }
                 )
             },
             floatingActionButton = {
@@ -85,19 +87,30 @@ fun MainScreenPreview() {
             },
             bottomBar = { TodoNavigationBar() }
         ) { padding ->
-            Surface(Modifier.padding(padding)) {
-                TaskListPreview()
-            }
+            content(padding)
         }
     }
 }
 
 @Composable
-fun MainDropdownMenu(expanded: Boolean, onDismiss: () -> Unit) {
-    DropdownMenu(expanded = expanded, onDismissRequest = onDismiss) {
-        DropdownMenuItem(text = { Text(text = "Sort") }, leadingIcon = { Icon(Icons.Default.Sort, "") }, onClick = { /*TODO*/ })
-        DropdownMenuItem(text = { Text(text = "Filter") }, leadingIcon = { Icon(Icons.Default.FilterList, "") }, onClick = { /*TODO*/ })
-        DropdownMenuItem(text = { Text(text = "Show completed") }, leadingIcon = { Icon(Icons.Default.ChecklistRtl, "") }, onClick = { /*TODO*/ })
+fun MainDropdownMenu() {
+    var expanded by remember { mutableStateOf(false) }
+
+    IconButton(onClick = { expanded = true }) { Icon(Icons.Default.MoreVert, "") }
+
+    DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+        DropdownMenuItem(
+            text = { Text(text = "Sort") },
+            leadingIcon = { Icon(Icons.Default.Sort, "") },
+            onClick = { /*TODO*/ })
+        DropdownMenuItem(
+            text = { Text(text = "Filter") },
+            leadingIcon = { Icon(Icons.Default.FilterList, "") },
+            onClick = { /*TODO*/ })
+        DropdownMenuItem(
+            text = { Text(text = "Show completed") },
+            leadingIcon = { Icon(Icons.Default.ChecklistRtl, "") },
+            onClick = { /*TODO*/ })
     }
 }
 
@@ -116,7 +129,7 @@ fun TodoNavigationBar() {
         NavigationBarItem(
             selected = false,
             onClick = { /*TODO*/ },
-            icon = { Icon(Icons.Default.Today, "") })
+            icon = { Icon(Icons.Outlined.Book, "") })
         NavigationBarItem(
             selected = false,
             onClick = { /*TODO*/ },
