@@ -1,5 +1,6 @@
 package io.github.jakubherr.todo.login
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -31,10 +32,13 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import io.github.jakubherr.todo.R
+import io.github.jakubherr.todo.destinations.TaskListScreenDestination
 
 
 @RootNavGraph(start = true)
@@ -46,6 +50,31 @@ fun LoginScreen(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var showPassword by remember { mutableStateOf(false) }
+    val auth = remember { Firebase.auth }
+
+    fun register(email: String, password: String) = auth.createUserWithEmailAndPassword(email, password)
+        .addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                // Sign in success, update UI with the signed-in user's information
+                Log.d("DBG", "createUserWithEmail:success")
+                navigator.navigate(TaskListScreenDestination)
+            } else {
+                // If sign in fails, display a message to the user.
+                Log.w("DBG", "createUserWithEmail:failure", task.exception)
+            }
+        }
+
+    fun login(email: String, password: String) = auth.signInWithEmailAndPassword(email, password)
+        .addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                // Sign in success, update UI with the signed-in user's information
+                Log.d("DBG", "signInWithEmail:success")
+                navigator.navigate(TaskListScreenDestination)
+            } else {
+                // If sign in fails, display a message to the user.
+                Log.w("DBG", "signInWithEmail:failure", task.exception)
+            }
+        }
 
     Surface(Modifier.fillMaxSize()) {
         Column(
@@ -71,11 +100,18 @@ fun LoginScreen(
 
             Spacer(Modifier.padding(vertical = 5.dp))
 
+            // TODO make a separate screen for login and registration
             Button(
-                onClick = { /*TODO*/ },
+                onClick = { login(email, password) },
                 enabled = email.isNotBlank() && password.isNotBlank()
             ) {
                 Text("Log in")
+            }
+            Button(
+                onClick = { register(email, password) },
+                enabled = email.isNotBlank() && password.isNotBlank()
+            ) {
+                Text("Register")
             }
         }
     }

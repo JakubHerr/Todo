@@ -1,7 +1,6 @@
 package io.github.jakubherr.todo
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.google.firebase.auth.FirebaseAuth
@@ -22,15 +21,4 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
-    private fun test(email: String, password: String) = auth.createUserWithEmailAndPassword(email, password)
-        .addOnCompleteListener(this) { task ->
-            if (task.isSuccessful) {
-                // Sign in success, update UI with the signed-in user's information
-                Log.d("DBG", "createUserWithEmail:success")
-            } else {
-                // If sign in fails, display a message to the user.
-                Log.w("DBG", "createUserWithEmail:failure", task.exception)
-            }
-        }
 }

@@ -9,6 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.rememberNavHostEngine
+import io.github.jakubherr.todo.destinations.Destination
+import io.github.jakubherr.todo.destinations.LoginScreenDestination
 import io.github.jakubherr.todo.ui.composables.TodoDropdownMenu
 import io.github.jakubherr.todo.ui.composables.TodoNavigationBar
 import io.github.jakubherr.todo.ui.composables.TodoScaffold
@@ -38,3 +40,5 @@ fun TodoApp() {
         )
     }
 }
+
+private val Destination.shouldShowAppBar get() = this !is LoginScreenDestination
