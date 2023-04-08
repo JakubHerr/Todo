@@ -1,6 +1,5 @@
 package io.github.jakubherr.todo.tasks
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -27,7 +26,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.github.jakubherr.todo.ui.theme.TodoTheme
 
@@ -35,13 +33,6 @@ data class Task(val name: String, val checked: Boolean)
 
 private val tasks = listOf(Task("Foo", false), Task("Bar", true))
 
-@Preview(
-    heightDp = 800,
-    widthDp = 360,
-    showBackground = true,
-    apiLevel = 33,
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-)
 @Composable
 fun TaskListPreview() {
     TodoTheme {

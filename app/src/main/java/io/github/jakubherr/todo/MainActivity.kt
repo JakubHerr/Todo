@@ -3,7 +3,6 @@ package io.github.jakubherr.todo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.ramcosta.composedestinations.DestinationsNavHost
 import io.github.jakubherr.todo.ui.theme.TodoTheme
 
 class MainActivity : ComponentActivity() {
@@ -11,7 +10,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TodoTheme {
-                DestinationsNavHost(navGraph = NavGraphs.root)
+                TodoApp()
             }
         }
     }
