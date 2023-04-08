@@ -1,6 +1,5 @@
-package io.github.jakubherr.todo.ui.theme.screen
+package io.github.jakubherr.todo.notes
 
-import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,20 +30,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import io.github.jakubherr.todo.TodoScaffold
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import io.github.jakubherr.todo.ui.composables.TodoScaffold
 
-@Preview(
-    heightDp = 800,
-    widthDp = 360,
-    showBackground = true,
-    apiLevel = 33,
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-)
+@Destination
 @Composable
-fun NoteList() {
-    TodoScaffold(title = "Notes") { padding ->
+fun NoteListScreen(
+    navigator: DestinationsNavigator
+) {
+    TodoScaffold(navigator = navigator, title = "Notes") { padding ->
         Surface(Modifier.padding(padding)) {
             LazyColumn(Modifier.padding(horizontal = 16.dp)) {
                 items(3) {
@@ -88,16 +84,11 @@ fun Note() {
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(
-    heightDp = 800,
-    widthDp = 360,
-    showBackground = true,
-    apiLevel = 33,
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-)
 @Composable
-fun NoteDetail() {
-    TodoScaffold(title = "Add note") { padding ->
+fun NoteDetail(
+    navigator: DestinationsNavigator
+) {
+    TodoScaffold(navigator = navigator, title = "Add note") { padding ->
         Surface(Modifier.padding(padding)) {
             Column(
                 Modifier

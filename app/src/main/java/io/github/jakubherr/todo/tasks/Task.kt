@@ -1,4 +1,4 @@
-package io.github.jakubherr.todo.ui.theme.shared
+package io.github.jakubherr.todo.tasks
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
