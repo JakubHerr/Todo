@@ -1,13 +1,12 @@
-package io.github.jakubherr.todo.tasks
+package io.github.jakubherr.todo.ui.theme.shared
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -26,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.github.jakubherr.todo.ui.theme.TodoTheme
 
@@ -33,6 +33,13 @@ data class Task(val name: String, val checked: Boolean)
 
 private val tasks = listOf(Task("Foo", false), Task("Bar", true))
 
+@Preview(
+    heightDp = 800,
+    widthDp = 360,
+    showBackground = true,
+    apiLevel = 33,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+)
 @Composable
 fun TaskListPreview() {
     TodoTheme {
@@ -84,19 +91,16 @@ fun Task(
     checked: Boolean,
     onChecked: (Boolean) -> Unit,
 ) {
-    Card(modifier = Modifier.padding(horizontal = 8.dp)) {
+    Card(modifier = Modifier.padding(horizontal = 2.dp)) {
         Row(
             modifier = Modifier
+                .padding(horizontal = 5.dp)
                 .wrapContentHeight()
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text, style = MaterialTheme.typography.titleMedium)
-                Spacer(Modifier.width(8.dp))
-                Text("05.03.23 12:45", style = MaterialTheme.typography.bodySmall) // placeholder
-            }
+            Text(text, fontWeight = FontWeight.Bold)
             Checkbox(checked = checked, onCheckedChange = { onChecked(it) })
         }
     }
