@@ -2,8 +2,8 @@ package io.github.jakubherr.todo.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.github.jakubherr.todo.login.data.UserRepository
-import io.github.jakubherr.todo.login.model.User
+import io.github.jakubherr.todo.data.UserRepository
+import io.github.jakubherr.todo.data.User
 import kotlinx.coroutines.launch
 
 class UserViewModel(private val repository: UserRepository): ViewModel() {

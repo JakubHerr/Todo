@@ -36,7 +36,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import io.github.jakubherr.todo.destinations.TaskAddBottomSheetScreenDestination
-import io.github.jakubherr.todo.tasks.model.Task
+import io.github.jakubherr.todo.data.Task
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)

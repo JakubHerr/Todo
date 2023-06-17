@@ -1,4 +1,4 @@
-package io.github.jakubherr.todo.login.model
+package io.github.jakubherr.todo.data
 
 data class User(
     val uid: String,

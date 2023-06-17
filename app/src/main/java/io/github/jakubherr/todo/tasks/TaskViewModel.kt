@@ -2,9 +2,9 @@ package io.github.jakubherr.todo.tasks
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.github.jakubherr.todo.tasks.data.TaskRepository
-import io.github.jakubherr.todo.tasks.model.Priority
-import io.github.jakubherr.todo.tasks.model.Task
+import io.github.jakubherr.todo.data.TaskRepository
+import io.github.jakubherr.todo.data.Priority
+import io.github.jakubherr.todo.data.Task
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDateTime
