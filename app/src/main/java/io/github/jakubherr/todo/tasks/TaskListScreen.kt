@@ -1,5 +1,6 @@
 package io.github.jakubherr.todo.tasks
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,7 +19,6 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -28,18 +28,23 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import io.github.jakubherr.todo.data.Priority
 import io.github.jakubherr.todo.destinations.TaskAddBottomSheetScreenDestination
 import io.github.jakubherr.todo.data.Task
+import io.github.jakubherr.todo.ui.theme.TodoTheme
 import org.koin.androidx.compose.koinViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @RootNavGraph(start = true)
 @Destination
 @Composable
@@ -49,10 +54,23 @@ fun TaskListScreen(
 ) {
     val taskList by vm.taskList.collectAsState(initial = emptyList())
 
+    TaskListScreen(
+        taskList,
+        onAddTaskClicked = { navigator.navigate(TaskAddBottomSheetScreenDestination) },
+        onTaskChecked = { task -> vm.checkTask(task)}
+    )
+}
+
+@Composable
+fun TaskListScreen(
+    taskList: List<Task>,
+    onAddTaskClicked: () -> Unit,
+    onTaskChecked: (Task) -> Unit,
+) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         floatingActionButton = {
-            FloatingActionButton(onClick = { navigator.navigate(TaskAddBottomSheetScreenDestination) }) {
+            FloatingActionButton(onAddTaskClicked) {
                 Icon(imageVector = Icons.Default.Add, "Add task")
             }
         },
@@ -60,10 +78,9 @@ fun TaskListScreen(
         TaskList(
             Modifier.padding(it),
             "Category",
-            taskList
-        ) { task ->
-            vm.checkTask(task)
-        }
+            taskList,
+            onTaskChecked
+        )
     }
 }
 
@@ -74,18 +91,28 @@ fun TaskList(
     tasks: List<Task>,
     onTaskChecked: (Task) -> Unit,
 ) {
-    Card(modifier.wrapContentSize()) {
+    var collapsed by remember { mutableStateOf(false) }
+
+    Card(modifier.padding(10.dp).animateContentSize()) {
         LazyColumn(Modifier.padding(5.dp)) {
-            item { TaskListHeader(listName) }
+            item { TaskListHeader(
+                listName,
+                onCollapsed = { collapsed = !collapsed }
+            ) }
             items(tasks) { task ->
-                TaskItem(task, onChecked = { onTaskChecked(task) })
+                if (!collapsed) TaskItem(task, onChecked = { onTaskChecked(task) })
             }
         }
     }
 }
 
 @Composable
-fun TaskListHeader(listName: String) {
+fun TaskListHeader(
+    listName: String,
+    onCollapsed: () -> Unit,
+) {
+
+
     Row(
         Modifier
             .padding(5.dp)
@@ -95,7 +122,7 @@ fun TaskListHeader(listName: String) {
     ) {
         Text(listName, fontWeight = FontWeight.ExtraBold)
 
-        IconButton(onClick = { /*TODO*/ }, Modifier.size(28.dp)) {
+        IconButton(onClick = onCollapsed, Modifier.size(28.dp)) {
             Icon(imageVector = Icons.Default.KeyboardArrowDown, "")
         }
     }
@@ -122,5 +149,23 @@ fun TaskItem(
             }
             Checkbox(checked = task.completed, onCheckedChange = { onChecked(it) })
         }
+    }
+}
+
+@Preview
+@Composable
+fun TaskListScreenPreview() {
+    val taskList = listOf(
+        Task("0", "foo", priority = Priority.HIGH, deadline = "2023-04-13 13:30"),
+        Task("0", "bar", completed = true, priority = Priority.MEDIUM),
+        Task("0", "baz", priority = Priority.HIGH)
+    )
+
+    TodoTheme(darkTheme = true) {
+        TaskListScreen(
+            taskList,
+            {},
+            {},
+        )
     }
 }
