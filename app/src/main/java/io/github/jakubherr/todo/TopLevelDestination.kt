@@ -18,7 +18,7 @@ import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.animations.rememberAnimatedNavHostEngine
 import io.github.jakubherr.todo.destinations.Destination
 import io.github.jakubherr.todo.destinations.LoginScreenDestination
-import io.github.jakubherr.todo.login.UserViewModel
+import io.github.jakubherr.todo.login.LoginViewModel
 import io.github.jakubherr.todo.ui.composables.TodoDropdownMenu
 import io.github.jakubherr.todo.ui.composables.TodoNavigationBar
 import io.github.jakubherr.todo.ui.composables.TodoScaffold
@@ -31,7 +31,7 @@ import org.koin.androidx.compose.koinViewModel
 )
 @Composable
 fun TopLevelDestination(
-    vm: UserViewModel = koinViewModel()
+    vm: LoginViewModel = koinViewModel()
 ) {
     val engine = rememberAnimatedNavHostEngine()
     val navController = engine.rememberNavController()

@@ -1,7 +1,7 @@
 package io.github.jakubherr.todo
 
 import android.app.Application
-import io.github.jakubherr.todo.login.UserViewModel
+import io.github.jakubherr.todo.login.LoginViewModel
 import io.github.jakubherr.todo.data.UserRepository
 import io.github.jakubherr.todo.tasks.TaskViewModel
 import io.github.jakubherr.todo.data.TaskRepository
@@ -18,7 +18,7 @@ class TodoApplication: Application() {
         single<TaskRepository> { FireTask() }
         single<UserRepository> { FireUser() }
         viewModel { TaskViewModel(get()) }
-        viewModel { UserViewModel(get()) }
+        viewModel { LoginViewModel(get()) }
     }
 
     override fun onCreate() {

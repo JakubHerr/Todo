@@ -6,7 +6,7 @@ import io.github.jakubherr.todo.data.UserRepository
 import io.github.jakubherr.todo.data.User
 import kotlinx.coroutines.launch
 
-class UserViewModel(private val repository: UserRepository): ViewModel() {
+class LoginViewModel(private val repository: UserRepository): ViewModel() {
     // TODO add UiState
 
     fun register(email: String, password: String) {

@@ -13,7 +13,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
 import io.github.jakubherr.todo.NavGraphs
 import io.github.jakubherr.todo.destinations.LoginScreenDestination
-import io.github.jakubherr.todo.login.UserViewModel
+import io.github.jakubherr.todo.login.LoginViewModel
 import org.koin.androidx.compose.koinViewModel
 
 // TODO add settings
@@ -21,7 +21,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun SettingsScreen(
     navigator: DestinationsNavigator,
-    vm: UserViewModel = koinViewModel()
+    vm: LoginViewModel = koinViewModel()
 ) {
     Column(Modifier.padding(5.dp)) {
         Text("Settings")

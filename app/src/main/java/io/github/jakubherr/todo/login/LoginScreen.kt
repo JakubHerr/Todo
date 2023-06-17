@@ -14,9 +14,9 @@ import androidx.compose.material.icons.filled.Mail
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -32,11 +32,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import io.github.jakubherr.todo.R
 import io.github.jakubherr.todo.destinations.TaskListScreenDestination
+import io.github.jakubherr.todo.ui.theme.TodoTheme
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -44,19 +46,37 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun LoginScreen(
     navigator: DestinationsNavigator,
-    vm: UserViewModel = koinViewModel()
+    vm: LoginViewModel = koinViewModel()
+) {
+    val scope = rememberCoroutineScope()
+
+    LoginScreen(
+        onLogin = { email, password ->
+            scope.launch {
+                val result = vm.login(email, password)
+                if (result.isSuccess) navigator.navigate(TaskListScreenDestination)
+                else Log.e("LOGIN", "failed to log user in, ${result.exceptionOrNull()}") // TODO toast
+            }
+        },
+        onRegister = { email, password -> vm.register(email, password) },
+    )
+}
+
+@Composable
+fun LoginScreen(
+    onLogin: (String, String) -> Unit,
+    onRegister: (String, String) -> Unit,
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var showPassword by remember { mutableStateOf(false) }
-    val scope = rememberCoroutineScope()
 
     Surface(Modifier.fillMaxSize()) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
-            Text(stringResource(R.string.login))
+            Text(stringResource(R.string.app_name), style = MaterialTheme.typography.displayLarge)
             Spacer(Modifier.padding(vertical = 5.dp))
 
             EmailField(
@@ -77,19 +97,13 @@ fun LoginScreen(
 
             // TODO make a separate screen for login and registration
             Button(
-                onClick = {
-                    scope.launch {
-                        val result = vm.login(email, password)
-                        if (result.isSuccess) navigator.navigate(TaskListScreenDestination)
-                        else Log.e("LOGIN", "failed to log user in, ${result.exceptionOrNull()}") // TODO toast
-                    }
-                },
+                onClick = { onLogin(email, password) },
                 enabled = email.isNotBlank() && password.isNotBlank()
             ) {
                 Text("Log in")
             }
             Button(
-                onClick = { vm.register(email, password) },
+                onClick = { onRegister(email, password) },
                 enabled = email.isNotBlank() && password.isNotBlank()
             ) {
                 Text("Register")
@@ -117,7 +131,7 @@ private fun PasswordField(
     password: String,
     showPassword: Boolean,
     onChange: (String) -> Unit,
-    onVisibilityChange: () -> Unit
+    onVisibilityChange: () -> Unit,
 ) {
     OutlinedTextField(
         value = password,
@@ -138,3 +152,14 @@ private fun PasswordField(
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
     )
 }
+
+@Preview
+@Composable
+fun LoginScreenPreview() {
+    TodoTheme(darkTheme = true) {
+        Surface {
+            LoginScreen({ _, _ -> }, { _, _ -> })
+        }
+    }
+}
+
