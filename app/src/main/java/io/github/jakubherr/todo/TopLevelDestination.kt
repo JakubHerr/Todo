@@ -39,8 +39,7 @@ fun TopLevelDestination(
     val bottomSheetNavigator = rememberBottomSheetNavigator()
     navController.navigatorProvider += bottomSheetNavigator
 
-    val startRoute =
-        if (vm.currentUser() == null) LoginScreenDestination else NavGraphs.root.startRoute
+    val startRoute = if (vm.currentUser() == null) LoginScreenDestination else NavGraphs.root.startRoute
 
     ModalBottomSheetLayout(
         bottomSheetNavigator = bottomSheetNavigator,

@@ -1,5 +1,6 @@
 package io.github.jakubherr.todo.login
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -23,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,6 +37,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import io.github.jakubherr.todo.R
 import io.github.jakubherr.todo.destinations.TaskListScreenDestination
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Destination
@@ -46,6 +49,7 @@ fun LoginScreen(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var showPassword by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
 
     Surface(Modifier.fillMaxSize()) {
         Column(
@@ -74,8 +78,11 @@ fun LoginScreen(
             // TODO make a separate screen for login and registration
             Button(
                 onClick = {
-                    vm.login(email, password)
-                    navigator.navigate(TaskListScreenDestination) // debug only
+                    scope.launch {
+                        val result = vm.login(email, password)
+                        if (result.isSuccess) navigator.navigate(TaskListScreenDestination)
+                        else Log.e("LOGIN", "failed to log user in, ${result.exceptionOrNull()}") // TODO toast
+                    }
                 },
                 enabled = email.isNotBlank() && password.isNotBlank()
             ) {
@@ -92,7 +99,6 @@ fun LoginScreen(
 }
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 private fun EmailField(
     email: String,
     onChange: (String) -> Unit,
@@ -107,7 +113,6 @@ private fun EmailField(
 }
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 private fun PasswordField(
     password: String,
     showPassword: Boolean,
