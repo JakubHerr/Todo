@@ -13,7 +13,8 @@ data class Task(
     val name: String = "",
     val completed: Boolean = false,
     val priority: Priority = Priority.LOW,
-    val deadline: String? = null // ISO 8601 TODO handle timezones
+    val deadline: String? = null, // ISO 8601 TODO handle timezones
+    val tags: List<String> = emptyList(),
 ) {
     companion object {
         fun DocumentSnapshot.toTask(): Task? {
@@ -24,6 +25,7 @@ data class Task(
                     getBoolean("completed")!!,
                     Priority.valueOf(getString("priority")!!),
                     getString("deadline"),
+                    get("tags") as? List<String> ?: emptyList(),
                 )
             } catch (e: Exception) {
                 FirebaseCrashlytics.getInstance().recordException(e)
