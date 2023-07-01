@@ -38,7 +38,7 @@ import androidx.compose.ui.window.Dialog
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.DestinationStyle
-import io.github.jakubherr.todo.data.Priority
+import io.github.jakubherr.todo.data.model.Priority
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone

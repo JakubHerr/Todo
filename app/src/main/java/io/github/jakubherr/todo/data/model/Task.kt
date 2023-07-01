@@ -1,4 +1,4 @@
-package io.github.jakubherr.todo.data
+package io.github.jakubherr.todo.data.model
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight

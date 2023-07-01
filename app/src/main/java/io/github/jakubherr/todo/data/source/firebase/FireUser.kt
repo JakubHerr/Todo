@@ -2,7 +2,7 @@ package io.github.jakubherr.todo.data.source.firebase
 
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import io.github.jakubherr.todo.data.User
+import io.github.jakubherr.todo.data.model.User
 import io.github.jakubherr.todo.data.UserRepository
 import kotlinx.coroutines.tasks.await
 import kotlin.coroutines.cancellation.CancellationException

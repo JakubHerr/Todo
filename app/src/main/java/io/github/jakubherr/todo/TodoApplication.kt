@@ -20,7 +20,7 @@ class TodoApplication: Application() {
         single<TaskRepository> { FireTask() }
         single<UserRepository> { FireUser() }
         single<ProjectRepository> { FireProject() }
-        viewModel { TaskViewModel(get()) }
+        viewModel { TaskViewModel(get(), get()) }
         viewModel { LoginViewModel(get()) }
     }
 

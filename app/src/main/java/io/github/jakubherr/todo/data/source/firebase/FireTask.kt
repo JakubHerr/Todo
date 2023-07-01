@@ -2,8 +2,8 @@ package io.github.jakubherr.todo.data.source.firebase
 
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import io.github.jakubherr.todo.data.Task
-import io.github.jakubherr.todo.data.Task.Companion.toTask
+import io.github.jakubherr.todo.data.model.Task
+import io.github.jakubherr.todo.data.model.Task.Companion.toTask
 import io.github.jakubherr.todo.data.TaskRepository
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose

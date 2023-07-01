@@ -5,9 +5,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
-import io.github.jakubherr.todo.data.Project
+import io.github.jakubherr.todo.data.model.Project
 import io.github.jakubherr.todo.data.ProjectRepository
-import io.github.jakubherr.todo.data.Task
+import io.github.jakubherr.todo.data.model.Task
 import io.github.jakubherr.todo.ui.theme.TodoTheme
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
