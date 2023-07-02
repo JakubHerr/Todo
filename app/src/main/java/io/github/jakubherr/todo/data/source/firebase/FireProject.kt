@@ -21,6 +21,10 @@ class FireProject: ProjectRepository {
         projectCollection.document(project.name).set(project)
     }
 
+    override suspend fun getProject(name: String) {
+        projectCollection.document(name).get()
+    }
+
     override suspend fun deleteProject(project: Project) {
         projectCollection.document(project.name).delete().await()
     }
@@ -47,4 +51,8 @@ class FireProject: ProjectRepository {
 
         awaitClose { listener.remove() }
     }
+
+//    override fun getAllTasks(name: String): List<Task> {
+//        projectCollection.document()
+//    }
 }

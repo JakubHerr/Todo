@@ -11,6 +11,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 data class Task(
     val id: String = "", // empty by default, unique id gets added in TaskRepository
     val name: String = "",
+    val projectName: String = "Inbox",
     val completed: Boolean = false,
     val priority: Priority = Priority.LOW,
     val deadline: String? = null, // ISO 8601 TODO handle timezones
@@ -22,6 +23,7 @@ data class Task(
                 Task(
                     id,
                     getString("name")!!,
+                    getString("projectName") ?: "Inbox",
                     getBoolean("completed")!!,
                     Priority.valueOf(getString("priority")!!),
                     getString("deadline"),
