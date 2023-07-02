@@ -66,17 +66,14 @@ fun TaskListScreen(
 ) {
     val taskList by vm.taskList.collectAsState(initial = emptyList())
     val projectList by vm.projectList.collectAsState(initial = emptyList())
-
-    // fetch a list of projects and pass them to the drawer
-    // hoist selectedItem here and make it inbox by default
-    // onClick change selected item
-    // selected item should influence title and shown tasks
+    val projectTaskList = vm.projectTaskList
 
     TodoDrawer(
-        projectList = projectList
+        projectList = projectList,
+        onProjectSelected = { vm.getProjectTasks(it) }
     ) {
         TaskListScreen(
-            taskList,
+            projectTaskList.toList(),
             onAddTaskClicked = { navigator.navigate(TaskAddBottomSheetScreenDestination) },
             onTaskChecked = { task -> vm.checkTask(task)}
         )
@@ -185,6 +182,7 @@ fun TaskItem(
 @Composable
 fun TodoDrawer(
     projectList: List<Project>,
+    onProjectSelected: (String) -> Unit,
     content: @Composable () -> Unit,
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
@@ -204,6 +202,7 @@ fun TodoDrawer(
                         onClick = {
                             scope.launch { drawerState.close() }
                             selectedProject.value = item
+                            onProjectSelected(item.name)
                         },
                         modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                     )

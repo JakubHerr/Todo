@@ -1,5 +1,7 @@
 package io.github.jakubherr.todo.tasks
 
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.jakubherr.todo.data.ProjectRepository
@@ -15,10 +17,16 @@ import kotlinx.datetime.toInstant
 
 class TaskViewModel(
     private val taskRepository: TaskRepository,
-    projectRepository: ProjectRepository,
+    private val projectRepository: ProjectRepository,
 ) : ViewModel() {
     val taskList: Flow<List<Task>> = taskRepository.subscribeToAllTasks()
     val projectList: Flow<List<Project>> = projectRepository.subscribeToAllProjects()
+    // temporary, should listen to snapshots, but also be able to change the project being listened to
+    var projectTaskList: SnapshotStateList<Task> = mutableStateListOf()
+
+    init {
+        viewModelScope.launch { getProjectTasks("Inbox") }
+    }
 
     fun addTask(name: String, priority: Priority, deadline: LocalDateTime? = null) {
         viewModelScope.launch {
@@ -35,5 +43,16 @@ class TaskViewModel(
 
     fun checkTask(task: Task) {
         viewModelScope.launch { taskRepository.checkTask(task) }
+    }
+
+    fun subscribeToProjectTasks(name: String) {
+        projectRepository.subscribeToProjectTasks(name)
+    }
+
+    fun getProjectTasks(name: String) {
+        viewModelScope.launch {
+            projectTaskList.clear()
+            projectTaskList.addAll(projectRepository.getProjectTasks(name))
+        }
     }
 }

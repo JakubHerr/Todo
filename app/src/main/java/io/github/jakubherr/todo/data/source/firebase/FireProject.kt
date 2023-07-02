@@ -7,6 +7,7 @@ import io.github.jakubherr.todo.data.model.Project
 import io.github.jakubherr.todo.data.ProjectRepository
 import io.github.jakubherr.todo.data.model.Project.Companion.toProject
 import io.github.jakubherr.todo.data.model.Task
+import io.github.jakubherr.todo.data.model.Task.Companion.toTask
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -52,7 +53,23 @@ class FireProject: ProjectRepository {
         awaitClose { listener.remove() }
     }
 
-//    override fun getAllTasks(name: String): List<Task> {
-//        projectCollection.document()
-//    }
+    override suspend fun getProjectTasks(projectName: String): List<Task> {
+        val tasks = projectCollection.document(projectName).collection("tasks").get().await()
+        return tasks.documents.mapNotNull { it.toTask() }
+    }
+
+    override fun subscribeToProjectTasks(projectName: String): Flow<List<Task>> = callbackFlow {
+        val listener = projectCollection.document(projectName).collection("tasks").addSnapshotListener { snap, err ->
+            err?.let {
+                cancel(message = "Error fetching projects", it)
+                return@addSnapshotListener
+            }
+
+            snap?.let { update ->
+                trySend(update.documents.mapNotNull { it.toTask() })
+            }
+        }
+
+        awaitClose { listener.remove() }
+    }
 }
